@@ -1,4 +1,4 @@
-package com.uade.zapateria.ecommerce;
+package com.zapateria.ecommerce;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

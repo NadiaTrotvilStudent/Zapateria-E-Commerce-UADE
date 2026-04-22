@@ -1,4 +1,4 @@
-package com.uade.zapateria.ecommerce;
+package com.zapateria.ecommerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
