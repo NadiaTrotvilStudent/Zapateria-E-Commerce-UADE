@@ -1,6 +1,6 @@
 package com.zapateria.ecommerce.service;
 
-import com.zapateria.ecommerce.dto.GeneroResponse;
+import com.zapateria.ecommerce.dto.catalogo.GeneroResponse;
 import com.zapateria.ecommerce.repository.GeneroRepository;
 import org.springframework.stereotype.Service;
 

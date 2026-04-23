@@ -1,6 +1,6 @@
 package com.zapateria.ecommerce.controller;
 
-import com.zapateria.ecommerce.dto.MarcaResponse;
+import com.zapateria.ecommerce.dto.catalogo.MarcaResponse;
 import com.zapateria.ecommerce.service.MarcaService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

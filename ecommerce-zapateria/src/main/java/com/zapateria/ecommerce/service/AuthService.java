@@ -1,8 +1,8 @@
 package com.zapateria.ecommerce.service;
 
-import com.zapateria.ecommerce.dto.AuthResponse;
-import com.zapateria.ecommerce.dto.LoginRequest;
-import com.zapateria.ecommerce.dto.RegistroUsuarioRequest;
+import com.zapateria.ecommerce.dto.auth.AuthResponse;
+import com.zapateria.ecommerce.dto.auth.LoginRequest;
+import com.zapateria.ecommerce.dto.auth.RegistroUsuarioRequest;
 import com.zapateria.ecommerce.exception.BadRequestException;
 import com.zapateria.ecommerce.exception.UnauthorizedException;
 import com.zapateria.ecommerce.model.Rol;

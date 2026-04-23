@@ -1,4 +1,6 @@
-package com.zapateria.ecommerce.dto;
+package com.zapateria.ecommerce.dto.auth;
+
+import com.zapateria.ecommerce.dto.usuario.UsuarioResponse;
 
 import java.time.Instant;
 

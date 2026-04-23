@@ -1,7 +1,7 @@
 package com.zapateria.ecommerce.controller;
 
-import com.zapateria.ecommerce.dto.VarianteProductoRequest;
-import com.zapateria.ecommerce.dto.VarianteProductoResponse;
+import com.zapateria.ecommerce.dto.producto.VarianteProductoRequest;
+import com.zapateria.ecommerce.dto.producto.VarianteProductoResponse;
 import com.zapateria.ecommerce.service.VarianteProductoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

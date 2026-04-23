@@ -1,6 +1,6 @@
 package com.zapateria.ecommerce.controller;
 
-import com.zapateria.ecommerce.dto.UsuarioResponse;
+import com.zapateria.ecommerce.dto.usuario.UsuarioResponse;
 import com.zapateria.ecommerce.service.UsuarioService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;

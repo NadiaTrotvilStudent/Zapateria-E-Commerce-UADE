@@ -1,4 +1,4 @@
-package com.zapateria.ecommerce.dto;
+package com.zapateria.ecommerce.dto.usuario;
 
 import java.util.Set;
 

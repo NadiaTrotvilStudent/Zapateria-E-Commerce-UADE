@@ -1,7 +1,7 @@
 package com.zapateria.ecommerce.service;
 
-import com.zapateria.ecommerce.dto.VarianteProductoRequest;
-import com.zapateria.ecommerce.dto.VarianteProductoResponse;
+import com.zapateria.ecommerce.dto.producto.VarianteProductoRequest;
+import com.zapateria.ecommerce.dto.producto.VarianteProductoResponse;
 import com.zapateria.ecommerce.exception.BadRequestException;
 import com.zapateria.ecommerce.exception.ResourceNotFoundException;
 import com.zapateria.ecommerce.model.Producto;

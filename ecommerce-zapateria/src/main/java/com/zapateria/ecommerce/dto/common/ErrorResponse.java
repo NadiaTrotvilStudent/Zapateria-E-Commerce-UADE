@@ -1,4 +1,4 @@
-package com.zapateria.ecommerce.dto;
+package com.zapateria.ecommerce.dto.common;
 
 import java.time.Instant;
 import java.util.Map;

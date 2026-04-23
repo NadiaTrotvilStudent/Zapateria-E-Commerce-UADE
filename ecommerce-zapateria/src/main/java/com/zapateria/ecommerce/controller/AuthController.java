@@ -1,10 +1,10 @@
 package com.zapateria.ecommerce.controller;
 
-import com.zapateria.ecommerce.dto.AuthResponse;
-import com.zapateria.ecommerce.dto.LoginRequest;
-import com.zapateria.ecommerce.dto.LogoutRequest;
-import com.zapateria.ecommerce.dto.RefreshTokenRequest;
-import com.zapateria.ecommerce.dto.RegistroUsuarioRequest;
+import com.zapateria.ecommerce.dto.auth.AuthResponse;
+import com.zapateria.ecommerce.dto.auth.LoginRequest;
+import com.zapateria.ecommerce.dto.auth.LogoutRequest;
+import com.zapateria.ecommerce.dto.auth.RefreshTokenRequest;
+import com.zapateria.ecommerce.dto.auth.RegistroUsuarioRequest;
 import com.zapateria.ecommerce.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

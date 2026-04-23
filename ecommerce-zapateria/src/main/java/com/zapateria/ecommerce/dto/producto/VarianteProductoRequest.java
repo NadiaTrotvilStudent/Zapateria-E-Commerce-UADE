@@ -1,4 +1,4 @@
-package com.zapateria.ecommerce.dto;
+package com.zapateria.ecommerce.dto.producto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.zapateria.ecommerce.dto;
+package com.zapateria.ecommerce.dto.producto;
 
 import java.math.BigDecimal;
 import java.util.List;

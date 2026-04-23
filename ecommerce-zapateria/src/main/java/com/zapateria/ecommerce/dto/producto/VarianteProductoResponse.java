@@ -1,4 +1,4 @@
-package com.zapateria.ecommerce.dto;
+package com.zapateria.ecommerce.dto.producto;
 
 /**
  * DTO de salida para devolver variantes.

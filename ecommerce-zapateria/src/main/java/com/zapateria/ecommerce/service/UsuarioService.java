@@ -1,6 +1,6 @@
 package com.zapateria.ecommerce.service;
 
-import com.zapateria.ecommerce.dto.UsuarioResponse;
+import com.zapateria.ecommerce.dto.usuario.UsuarioResponse;
 import com.zapateria.ecommerce.exception.ResourceNotFoundException;
 import com.zapateria.ecommerce.model.Rol;
 import com.zapateria.ecommerce.model.Usuario;
