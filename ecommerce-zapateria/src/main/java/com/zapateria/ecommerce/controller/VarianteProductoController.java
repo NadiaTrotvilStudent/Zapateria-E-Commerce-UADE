@@ -3,6 +3,9 @@ package com.zapateria.ecommerce.controller;
 import com.zapateria.ecommerce.dto.producto.VarianteProductoRequest;
 import com.zapateria.ecommerce.dto.producto.VarianteProductoResponse;
 import com.zapateria.ecommerce.service.VarianteProductoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/productos/{productoId}/variantes")
+@Tag(name = "Productos", description = "Catalogo y publicaciones de productos")
 public class VarianteProductoController {
 
     private final VarianteProductoService varianteProductoService;
@@ -29,12 +33,15 @@ public class VarianteProductoController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar variantes de un producto")
     public List<VarianteProductoResponse> listarVariantes(@PathVariable Long productoId) {
         return varianteProductoService.listarPorProducto(productoId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Crear variante", description = "Requiere rol VENDEDOR o ADMIN.")
+    @SecurityRequirement(name = "bearerAuth")
     public VarianteProductoResponse crearVariante(
             @PathVariable Long productoId,
             @Valid @RequestBody VarianteProductoRequest request

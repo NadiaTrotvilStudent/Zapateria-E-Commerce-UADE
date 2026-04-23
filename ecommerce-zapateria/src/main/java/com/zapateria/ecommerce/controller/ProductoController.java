@@ -3,6 +3,9 @@ package com.zapateria.ecommerce.controller;
 import com.zapateria.ecommerce.dto.producto.ProductoRequest;
 import com.zapateria.ecommerce.dto.producto.ProductoResponse;
 import com.zapateria.ecommerce.service.ProductoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/productos")
+@Tag(name = "Productos", description = "Catalogo y publicaciones de productos")
 public class ProductoController {
 
     private final ProductoService productoService;
@@ -32,28 +36,36 @@ public class ProductoController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar productos", description = "Devuelve productos ordenados alfabeticamente; permite filtrar por categoria.")
     public List<ProductoResponse> listarProductos(@RequestParam(required = false) Long categoriaId) {
         return productoService.listarProductos(categoriaId);
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener detalle de producto")
     public ProductoResponse obtenerProducto(@PathVariable Long id) {
         return productoService.obtenerProducto(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Crear producto", description = "Requiere rol VENDEDOR o ADMIN.")
+    @SecurityRequirement(name = "bearerAuth")
     public ProductoResponse crearProducto(@Valid @RequestBody ProductoRequest producto) {
         return productoService.guardarProducto(producto);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar producto", description = "Requiere rol VENDEDOR o ADMIN.")
+    @SecurityRequirement(name = "bearerAuth")
     public ProductoResponse actualizarProducto(@PathVariable Long id, @Valid @RequestBody ProductoRequest producto) {
         return productoService.actualizarProducto(id, producto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Eliminar producto", description = "Requiere rol VENDEDOR o ADMIN.")
+    @SecurityRequirement(name = "bearerAuth")
     public void eliminarProducto(@PathVariable Long id) {
         productoService.eliminarProducto(id);
     }
