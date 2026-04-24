@@ -2,6 +2,7 @@ package com.zapateria.ecommerce.service;
 
 import com.zapateria.ecommerce.dto.orden.DetalleOrdenResponse;
 import com.zapateria.ecommerce.dto.orden.OrdenResponse;
+import com.zapateria.ecommerce.exception.ForbiddenException;
 import com.zapateria.ecommerce.exception.ResourceNotFoundException;
 import com.zapateria.ecommerce.model.Orden;
 import com.zapateria.ecommerce.repository.OrdenRepository;
@@ -42,9 +43,12 @@ public class OrdenService {
     /**
      * Devuelve una orden puntual por su id.
      */
-    public OrdenResponse obtenerOrden(Long ordenId) {
+    public OrdenResponse obtenerOrden(Long ordenId, Long usuarioId) {
         Orden orden = ordenRepository.findById(ordenId)
                 .orElseThrow(() -> new ResourceNotFoundException("Orden no encontrada con id " + ordenId));
+        if (!orden.getUsuario().getId().equals(usuarioId)) {
+            throw new ForbiddenException("No tiene permiso para acceder a esta orden");
+        }
         return toResponse(orden);
     }
 

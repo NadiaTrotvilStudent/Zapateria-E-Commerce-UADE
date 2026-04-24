@@ -39,6 +39,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.UNAUTHORIZED, exception.getMessage(), null);
     }
 
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorResponse> handleForbidden(ForbiddenException exception) {
+        return buildResponse(HttpStatus.FORBIDDEN, exception.getMessage(), null);
+    }
+
     private ResponseEntity<ErrorResponse> buildResponse(
             HttpStatus status,
             String message,

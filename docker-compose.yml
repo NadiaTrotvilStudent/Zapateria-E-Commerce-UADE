@@ -26,6 +26,9 @@ services:
     restart: unless-stopped
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: ${JWT_SECRET:-zapateria-ecommerce-uade-secret-key-for-hs256-local-development}
+      DB_USERNAME: ${DB_USERNAME:-zapateria}
+      DB_PASSWORD: ${DB_PASSWORD:-zapateria}
     ports:
       - "8080:8080"
     depends_on:

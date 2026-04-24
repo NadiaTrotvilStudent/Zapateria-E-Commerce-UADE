@@ -4,12 +4,16 @@ import com.zapateria.ecommerce.dto.ActualizarCantidadCarritoRequest;
 import com.zapateria.ecommerce.dto.AgregarItemCarritoRequest;
 import com.zapateria.ecommerce.dto.CarritoResponse;
 import com.zapateria.ecommerce.service.CarritoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/api/carrito")
+@SecurityRequirement(name = "bearerAuth")
 public class CarritoController {
 
     private final CarritoService carritoService;
@@ -20,37 +24,44 @@ public class CarritoController {
 
 
     @GetMapping
-    public CarritoResponse obtenerCarrito(@RequestParam Long usuarioId) {
-        return carritoService.obtenerCarritoPorUsuario(usuarioId);
+    public CarritoResponse obtenerCarrito(@AuthenticationPrincipal Jwt jwt) {
+        return carritoService.obtenerCarritoPorUsuario(currentUserId(jwt));
     }
 
 
     @PostMapping
     public CarritoResponse agregarProducto(
-            @RequestParam Long usuarioId,
+            @AuthenticationPrincipal Jwt jwt,
             @Valid @RequestBody AgregarItemCarritoRequest request
     ) {
-        return carritoService.agregarProducto(usuarioId, request);
+        return carritoService.agregarProducto(currentUserId(jwt), request);
     }
 
 
     @PatchMapping("/items/{itemId}")
     public CarritoResponse actualizarCantidad(
-            @RequestParam Long usuarioId,
+            @AuthenticationPrincipal Jwt jwt,
             @PathVariable Long itemId,
             @Valid @RequestBody ActualizarCantidadCarritoRequest request
     ) {
-        return carritoService.actualizarCantidad(usuarioId, itemId, request);
+        return carritoService.actualizarCantidad(currentUserId(jwt), itemId, request);
     }
 
     @DeleteMapping("/items/{itemId}")
-    public CarritoResponse eliminarItem(@RequestParam Long usuarioId, @PathVariable Long itemId) {
-        return carritoService.eliminarItem(usuarioId, itemId);
+    public CarritoResponse eliminarItem(@AuthenticationPrincipal Jwt jwt, @PathVariable Long itemId) {
+        return carritoService.eliminarItem(currentUserId(jwt), itemId);
     }
 
     @DeleteMapping
-    public CarritoResponse vaciarCarrito(@RequestParam Long usuarioId) {
-        return carritoService.vaciarCarrito(usuarioId);
+    public CarritoResponse vaciarCarrito(@AuthenticationPrincipal Jwt jwt) {
+        return carritoService.vaciarCarrito(currentUserId(jwt));
     }
 
+    private Long currentUserId(Jwt jwt) {
+        Object claim = jwt.getClaim("userId");
+        if (claim instanceof Number number) {
+            return number.longValue();
+        }
+        throw new IllegalStateException("JWT sin claim userId valido");
+    }
 }
