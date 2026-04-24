@@ -9,7 +9,7 @@ services:
       MYSQL_PASSWORD: zapateria
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - zapateria-mysql-data:/var/lib/mysql
     healthcheck:
@@ -17,6 +17,20 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
+
+  app:
+    build:
+      context: ./ecommerce-zapateria
+      dockerfile: Dockerfile
+    container_name: zapateria-app
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
 
 volumes:
   zapateria-mysql-data:
