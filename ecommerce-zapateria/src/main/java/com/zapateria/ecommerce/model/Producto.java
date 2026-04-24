@@ -51,8 +51,10 @@ public class Producto {
     @Column(nullable = false)
     private Integer stock;
 
-    @Column(length = 255)
-    private String imagenUrl;
+    @Builder.Default
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ImagenProducto> imagenes = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "marca_id", nullable = false)

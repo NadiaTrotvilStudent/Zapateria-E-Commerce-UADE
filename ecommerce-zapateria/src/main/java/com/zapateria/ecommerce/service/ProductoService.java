@@ -7,6 +7,7 @@ import com.zapateria.ecommerce.exception.BadRequestException;
 import com.zapateria.ecommerce.exception.ResourceNotFoundException;
 import com.zapateria.ecommerce.model.Categoria;
 import com.zapateria.ecommerce.model.Genero;
+import com.zapateria.ecommerce.model.ImagenProducto;
 import com.zapateria.ecommerce.model.Marca;
 import com.zapateria.ecommerce.model.Producto;
 import com.zapateria.ecommerce.model.TipoProducto;
@@ -143,14 +144,10 @@ public class ProductoService {
                         "Usuario no encontrado con id " + request.usuarioCreadorId()
                 ));
 
-        if (request.imagenUrl() != null && request.imagenUrl().isBlank()) {
-            throw new BadRequestException("La imagen no puede ser una cadena vacia");
-        }
-
         producto.setNombre(request.nombre().trim());
         producto.setDescripcion(request.descripcion().trim());
         producto.setPrecio(request.precio());
-        producto.setImagenUrl(request.imagenUrl() == null ? null : request.imagenUrl().trim());
+        sincronizarImagenes(producto, request.imagenes());
         producto.setMarca(marca);
         producto.setTipoProducto(tipoProducto);
         producto.setGenero(genero);
@@ -158,9 +155,38 @@ public class ProductoService {
         producto.setUsuarioCreador(usuario);
     }
 
+    /**
+     * Reemplaza la coleccion de imagenes del producto con las urls recibidas,
+     * preservando el orden en el que llegan en el request.
+     */
+    private void sincronizarImagenes(Producto producto, List<String> urls) {
+        if (urls == null || urls.isEmpty()) {
+            throw new BadRequestException("Debe adjuntar al menos una imagen");
+        }
+
+        producto.getImagenes().clear();
+        for (int i = 0; i < urls.size(); i++) {
+            String url = urls.get(i);
+            if (url == null || url.isBlank()) {
+                throw new BadRequestException("La url de la imagen no puede estar vacia");
+            }
+            ImagenProducto imagen = ImagenProducto.builder()
+                    .url(url.trim())
+                    .orden(i)
+                    .producto(producto)
+                    .build();
+            producto.getImagenes().add(imagen);
+        }
+    }
+
     private ProductoResponse toResponse(Producto producto) {
         List<VarianteProductoResponse> variantes = producto.getVariantes().stream()
                 .map(this::toVarianteResponse)
+                .toList();
+
+        List<String> imagenes = producto.getImagenes().stream()
+                .sorted(java.util.Comparator.comparingInt(ImagenProducto::getOrden))
+                .map(ImagenProducto::getUrl)
                 .toList();
 
         return new ProductoResponse(
@@ -169,7 +195,7 @@ public class ProductoService {
                 producto.getDescripcion(),
                 producto.getPrecio(),
                 producto.getStock(),
-                producto.getImagenUrl(),
+                imagenes,
                 producto.getMarca().getId(),
                 producto.getMarca().getNombre(),
                 producto.getTipoProducto().getId(),

@@ -12,7 +12,7 @@ public record ProductoResponse(
         String descripcion,
         BigDecimal precio,
         Integer stock,
-        String imagenUrl,
+        List<String> imagenes,
         Long marcaId,
         String marcaNombre,
         Long tipoProductoId,

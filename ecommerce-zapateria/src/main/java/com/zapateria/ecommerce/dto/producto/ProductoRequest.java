@@ -2,10 +2,12 @@ package com.zapateria.ecommerce.dto.producto;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * DTO usado para crear o actualizar productos.
@@ -25,8 +27,11 @@ public record ProductoRequest(
         @DecimalMin(value = "0.01", message = "El precio debe ser mayor a 0")
         BigDecimal precio,
 
-        @Size(max = 255, message = "La imagen no puede superar los 255 caracteres")
-        String imagenUrl,
+        @NotEmpty(message = "Debe adjuntar al menos una imagen")
+        @Size(max = 10, message = "No se pueden adjuntar mas de 10 imagenes")
+        List<@NotBlank(message = "La url de la imagen no puede estar vacia")
+             @jakarta.validation.constraints.Size(max = 255, message = "La imagen no puede superar los 255 caracteres")
+             String> imagenes,
 
         @NotNull(message = "La marca es obligatoria")
         Long marcaId,
