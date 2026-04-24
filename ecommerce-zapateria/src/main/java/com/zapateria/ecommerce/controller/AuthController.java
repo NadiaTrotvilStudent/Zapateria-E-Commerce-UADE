@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @Operation(summary = "Login", description = "Autentica con email y contrasena, y devuelve access token y refresh token.")
+    @Operation(summary = "Iniciar sesion", description = "Autentica con email y contrasena, y devuelve access token y refresh token.")
     public AuthResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
     }
@@ -48,7 +48,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Logout", description = "Revoca el refresh token actual.")
+    @Operation(summary = "Cerrar sesion", description = "Revoca el refresh token actual.")
     public void logout(@Valid @RequestBody LogoutRequest request) {
         authService.logout(request.refreshToken());
     }

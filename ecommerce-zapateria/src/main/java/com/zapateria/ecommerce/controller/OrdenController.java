@@ -2,7 +2,10 @@ package com.zapateria.ecommerce.controller;
 
 import com.zapateria.ecommerce.dto.orden.OrdenResponse;
 import com.zapateria.ecommerce.service.OrdenService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/ordenes")
 @SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Ordenes", description = "Historial y detalle de compras del usuario autenticado")
 public class OrdenController {
 
     private final OrdenService ordenService;
@@ -27,12 +31,14 @@ public class OrdenController {
     }
 
     @GetMapping
-    public List<OrdenResponse> listarMisOrdenes(@AuthenticationPrincipal Jwt jwt) {
+    @Operation(summary = "Listar mis ordenes", description = "Devuelve el historial de compras del usuario autenticado.")
+    public List<OrdenResponse> listarMisOrdenes(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         return ordenService.listarOrdenesPorUsuario(currentUserId(jwt));
     }
 
     @GetMapping("/{ordenId}")
-    public OrdenResponse obtenerOrden(@AuthenticationPrincipal Jwt jwt, @PathVariable Long ordenId) {
+    @Operation(summary = "Obtener detalle de orden", description = "Devuelve el detalle de una orden perteneciente al usuario autenticado.")
+    public OrdenResponse obtenerOrden(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt, @PathVariable Long ordenId) {
         return ordenService.obtenerOrden(ordenId, currentUserId(jwt));
     }
 
