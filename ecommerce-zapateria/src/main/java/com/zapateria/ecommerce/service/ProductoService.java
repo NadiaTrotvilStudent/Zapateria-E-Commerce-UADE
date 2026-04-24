@@ -20,6 +20,7 @@ import com.zapateria.ecommerce.repository.ProductoRepository;
 import com.zapateria.ecommerce.repository.TipoProductoRepository;
 import com.zapateria.ecommerce.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ import java.util.List;
  * Logica principal para crear, actualizar, buscar y eliminar productos.
  */
 @Service
+@Transactional
 public class ProductoService {
 
     private final ProductoRepository productoRepository;
