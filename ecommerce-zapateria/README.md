@@ -1,10 +1,86 @@
-# Ecommerce Zapateria
+# E-Commerce Zapateria
 
 Backend REST de una zapateria online hecho para un TP de UADE.
 
 La idea del proyecto es cubrir el flujo basico de un ecommerce: registro y login de usuarios, catalogo publico, productos con imagenes y variantes, carrito con validacion de stock y consulta de ordenes del usuario autenticado.
 
 No es una plataforma "enterprise" ni pretende serlo. Esta pensado para resolver bien el alcance del trabajo practico y dejar una base prolija para seguir agregando cosas si hace falta.
+
+Proyecto backend desarrollado en Spring Boot para una aplicacion web de e-commerce orientada inicialmente a una zapateria, con posibilidad de extender el catalogo a otros articulos como cintos y accesorios.
+
+El sistema fue construido con arquitectura monolitica en 3 capas:
+
+- `controller`
+- `service`
+- `repository`
+
+Package principal del proyecto:
+
+```text
+com.zapateria.ecommerce
+```
+
+## Indice
+
+- [Resumen del proyecto](#resumen-del-proyecto)
+- [Consigna del trabajo](#consigna-del-trabajo)
+- [Que se hizo en este proyecto](#que-se-hizo-en-este-proyecto)
+- [Que incluye](#que-incluye)
+- [Stack](#stack)
+- [Estructura general](#estructura-general)
+- [Diagramas](#diagramas)
+- [Como correrlo](#como-correrlo)
+- [Requisitos](#requisitos)
+- [Base de datos](#base-de-datos)
+- [Datos demo](#datos-demo)
+- [Swagger y Postman](#swagger-y-postman)
+- [Autenticacion](#autenticacion)
+- [Rutas principales](#rutas-principales)
+- [Ejemplo rapido de flujo](#ejemplo-rapido-de-flujo)
+- [Imagenes de producto](#imagenes-de-producto)
+- [Tests](#tests)
+- [Comandos utiles](#comandos-utiles)
+- [Problemas comunes](#problemas-comunes)
+
+## Resumen del proyecto
+
+La aplicacion permite:
+
+- Registrar usuarios.
+- Realizar login con autenticacion JWT.
+- Consultar el catalogo de productos.
+- Administrar categorias, marcas, generos y tipos de producto.
+- Modelar productos con variantes por talle y color.
+- Gestionar carrito de compras.
+- Ejecutar checkout validando stock.
+- Guardar historial de compras mediante ordenes.
+- Exponer toda la funcionalidad mediante API REST.
+
+## Consigna del trabajo
+
+La consigna del trabajo solicita desarrollar una aplicacion web de e-commerce que contemple:
+
+- Gestion de usuarios.
+- Autenticacion de usuarios.
+- Catalogo de productos.
+- Detalle de producto.
+- Carrito de compras.
+- Checkout sin pago real.
+- Publicacion y gestion de productos.
+- Persistencia de datos.
+- Construccion de API REST.
+- Uso de Spring Boot, Spring Data JPA, Lombok y Maven.
+- Integracion con base de datos.
+- Arquitectura en capas.
+- Modelado explicito de entidades y relaciones JPA/Hibernate.
+- Manejo controlado de excepciones.
+- Incorporacion de Spring Security.
+
+## Que se hizo en este proyecto
+
+En este proyecto se implemento el backend de un ecommerce completo, priorizando el modelado del dominio y la comunicacion por API REST. Se desarrollaron endpoints para autenticacion, catalogo, productos, carrito, ordenes y entidades auxiliares como marcas, categorias, generos y tipos de producto.
+
+Tambien se incorporo seguridad con JWT, separacion por roles, persistencia con JPA/Hibernate, validaciones de negocio, manejo centralizado de errores, documentacion con Swagger/OpenAPI y configuracion para ejecucion local o con Docker.
 
 ## Que incluye
 
@@ -49,6 +125,76 @@ Entidades principales:
 - `RefreshToken`
 
 La decision importante del modelo es que el stock no vive en `Producto`, sino en `VarianteProducto`. Eso evita mezclar, por ejemplo, talle 40 negro con talle 42 blanco como si fueran el mismo item.
+
+```text
+Usuario ─────< Producto (uno crea muchos)
+Usuario ──1:1── Carrito ────< ItemCarrito >─── VarianteProducto
+Usuario ─────< Orden ────< DetalleOrden >─── VarianteProducto
+Usuario ─────< RefreshToken
+
+Producto >─── Marca
+         >─── Categoria
+         >─── Genero
+         >─── TipoProducto
+         ────< VarianteProducto (talle + color + stock)
+         ────< ImagenProducto    (url + orden)
+```
+
+- **Producto** es el articulo base (nombre, descripcion, precio, imagenes). No tiene stock propio: el stock vive en sus `VarianteProducto`.
+- **VarianteProducto** representa la combinacion talle/color con stock individual. Es lo que se agrega al carrito.
+- **ImagenProducto** permite 1 a 10 URLs ordenadas por producto.
+- **Carrito** es 1:1 con Usuario (se crea lazy en el primer POST).
+
+## Diagramas
+
+### Diagrama UML
+
+El diagrama UML representa las clases principales del dominio, sus atributos y las relaciones utilizadas en el codigo Java.
+
+![Diagrama UML](../docs/diagramas/UML.png)
+
+### Diagrama Entidad-Relacion
+
+El DER representa la estructura de la base de datos, incluyendo tablas, claves primarias, claves foraneas y cardinalidades.
+
+![Diagrama Entidad Relacion](../docs/diagramas/DER.png)
+
+## Estructura Del Proyecto
+
+```text
+ecommerce-zapateria/
+├── pom.xml                     # Dependencias Maven
+├── Dockerfile                  # Build multi-stage (JDK → JRE)
+├── README.md
+└── src/main/
+    ├── java/com/zapateria/ecommerce/
+    │   ├── EcommerceZapateriaApplication.java
+    │   ├── config/             # SecurityConfig, OpenApiConfig, LocalSeeder
+    │   ├── controller/         # Endpoints REST (uno por dominio)
+    │   ├── service/            # Logica de negocio
+    │   ├── repository/         # Spring Data JPA
+    │   ├── model/              # Entidades JPA
+    │   ├── dto/
+    │   │   ├── auth/           # Login, Registro, Refresh, AuthResponse
+    │   │   ├── producto/       # ProductoRequest/Response, Variante*
+    │   │   ├── catalogo/       # Marca, Genero, Tipo, Categoria responses
+    │   │   ├── orden/          # OrdenResponse, DetalleOrdenResponse
+    │   │   └── common/         # ErrorResponse
+    │   ├── security/           # JwtService, UserDetailsService
+    │   └── exception/          # BadRequest, NotFound, Unauthorized, GlobalHandler
+    └── resources/
+        ├── application.properties         # Default (MySQL local:3307)
+        ├── application-docker.properties  # Perfil docker (MySQL container)
+        └── application-local.properties   # Perfil local (H2 en memoria)
+```
+
+Raiz del repo:
+
+```text
+Zapateria-E-Commerce-UADE/
+├── docker-compose.yml          # Stack: app + MySQL 8.4
+└── ecommerce-zapateria/        # Proyecto Spring Boot
+```
 
 ## Como correrlo
 
