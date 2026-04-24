@@ -3,6 +3,20 @@
 Este proyecto expone documentacion interactiva de la API usando Swagger UI y OpenAPI.
 Esto permite probar los endpoints desde el navegador o importar el contrato directamente en Postman.
 
+## Base De Datos
+
+La aplicacion usa MySQL 8. La forma mas simple es levantar el contenedor incluido en el repo.
+
+Desde la raiz del repo:
+
+```bash
+docker compose up -d
+```
+
+Esto levanta MySQL en `localhost:3306` con la base `zapateria`, usuario `zapateria` y password `zapateria`, coincidiendo con lo configurado en `application.properties`.
+
+Los tests usan H2 en memoria (profile `test`), asi que no necesitan MySQL corriendo.
+
 ## Levantar La Aplicacion
 
 Desde la carpeta `ecommerce-zapateria`:
