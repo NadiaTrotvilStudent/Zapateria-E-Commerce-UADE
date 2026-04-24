@@ -107,7 +107,7 @@ ecommerce-zapateria/
 └── src/main/
     ├── java/com/zapateria/ecommerce/
     │   ├── EcommerceZapateriaApplication.java
-    │   ├── config/             # SecurityConfig, OpenApiConfig, LocalSeeder
+    │   ├── config/             # SecurityConfig, OpenApiConfig, DemoDataSeeder
     │   ├── controller/         # Endpoints REST (uno por dominio)
     │   ├── service/            # Logica de negocio
     │   ├── repository/         # Spring Data JPA
@@ -192,11 +192,11 @@ Luego desde `ecommerce-zapateria/`:
 ./mvnw spring-boot:run
 ```
 
-La app usa `application.properties` (sin perfil activo), que apunta a `localhost:3307` (el puerto que docker-compose expone para MySQL).
+La app usa `application.properties` (sin perfil activo), que apunta a `localhost:3307` (el puerto que docker-compose expone para MySQL). Tambien ejecuta el seeder demo por default, igual que Docker.
 
 ### Opcion 3: Sin Docker con H2 en memoria (perfil `local`)
 
-Util para probar la API rapidamente en una maquina que no tiene Docker ni MySQL. Corre con H2 en memoria y siembra datos de catalogo + un usuario vendedor pre-cargado para testear.
+Util para probar la API rapidamente en una maquina que no tiene Docker ni MySQL. Corre con H2 en memoria y tambien carga los mismos datos demo que Docker/MySQL.
 
 Desde `ecommerce-zapateria/`:
 
@@ -207,14 +207,15 @@ SPRING_PROFILES_ACTIVE=local ./mvnw spring-boot:run
 Esto:
 
 1. Activa el perfil `local`, que lee `application-local.properties` con H2 en memoria (`jdbc:h2:mem:zapateria`).
-2. Ejecuta `LocalSeeder` al startup, que inserta:
+2. Ejecuta el seeder demo al startup, que inserta:
    - **Categorias:** Zapatillas, Botas, Sandalias.
    - **Generos:** Hombre, Mujer, Unisex.
    - **Marcas:** Nike, Adidas.
    - **Tipos de producto:** Running, Casual.
-   - **Usuario vendedor:** `vendedor1@test.com` / `Password123!` con rol `VENDEDOR` (para poder crear productos sin setup manual).
+   - **Usuario vendedor:** `vendedor1@test.com` / `Password123!` con rol `VENDEDOR`.
+   - **Productos demo:** Urban Runner Pro, Sierra Mid Boot, Costa Flex Sandal; cada uno con imagenes y variantes con stock.
 
-**Importante:** al ser in-memory, los datos se pierden cuando se apaga la app. Este flujo es solo para testing / demo / smoke tests. Para desarrollo real usar las opciones 1 o 2 con MySQL persistente.
+**Importante:** al ser in-memory, los datos se pierden cuando se apaga la app. Pero cada arranque vuelve a sembrar el mismo set demo. Este flujo es solo para testing / demo / smoke tests. Para desarrollo real usar las opciones 1 o 2 con MySQL persistente.
 
 Consola H2 (si queres inspeccionar tablas): [http://localhost:8080/h2-console](http://localhost:8080/h2-console) con JDBC URL `jdbc:h2:mem:zapateria`, user `sa`, sin password.
 
