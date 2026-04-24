@@ -74,7 +74,7 @@ Luego desde `ecommerce-zapateria/`:
 ./mvnw spring-boot:run
 ```
 
-La app usa `application.properties` (sin perfil activo), que apunta a `localhost:3306`.
+La app usa `application.properties` (sin perfil activo), que apunta a `localhost:3307` (el puerto que docker-compose expone para MySQL).
 
 ## Base De Datos
 
