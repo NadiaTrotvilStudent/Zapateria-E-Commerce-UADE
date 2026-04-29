@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-EcommerceZapateriaApplication<ecommerce-zapateria>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.zapateria.ecommerce.EcommerceZapateriaApplication",
+            "projectName": "ecommerce-zapateria",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
