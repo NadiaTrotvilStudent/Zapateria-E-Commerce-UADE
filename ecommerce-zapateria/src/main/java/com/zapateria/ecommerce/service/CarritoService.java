@@ -1,6 +1,10 @@
 package com.zapateria.ecommerce.service;
 
-import com.zapateria.ecommerce.dto.*;
+import com.zapateria.ecommerce.dto.carrito.ActualizarCantidadCarritoRequest;
+import com.zapateria.ecommerce.dto.carrito.AgregarItemCarritoRequest;
+import com.zapateria.ecommerce.dto.carrito.CarritoResponse;
+import com.zapateria.ecommerce.dto.carrito.CheckoutResponse;
+import com.zapateria.ecommerce.dto.carrito.ItemCarritoResponse;
 import com.zapateria.ecommerce.exception.BadRequestException;
 import com.zapateria.ecommerce.exception.ResourceNotFoundException;
 import com.zapateria.ecommerce.model.*;

@@ -1,7 +1,7 @@
 package com.zapateria.ecommerce.service;
 
-import com.zapateria.ecommerce.dto.AgregarItemCarritoRequest;
-import com.zapateria.ecommerce.dto.CarritoResponse;
+import com.zapateria.ecommerce.dto.carrito.AgregarItemCarritoRequest;
+import com.zapateria.ecommerce.dto.carrito.CarritoResponse;
 import com.zapateria.ecommerce.exception.BadRequestException;
 import com.zapateria.ecommerce.model.Carrito;
 import com.zapateria.ecommerce.model.Producto;

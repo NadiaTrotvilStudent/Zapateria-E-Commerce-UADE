@@ -1,8 +1,8 @@
 package com.zapateria.ecommerce.controller;
 
-import com.zapateria.ecommerce.dto.ActualizarCantidadCarritoRequest;
-import com.zapateria.ecommerce.dto.AgregarItemCarritoRequest;
-import com.zapateria.ecommerce.dto.CarritoResponse;
+import com.zapateria.ecommerce.dto.carrito.ActualizarCantidadCarritoRequest;
+import com.zapateria.ecommerce.dto.carrito.AgregarItemCarritoRequest;
+import com.zapateria.ecommerce.dto.carrito.CarritoResponse;
 import com.zapateria.ecommerce.service.CarritoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

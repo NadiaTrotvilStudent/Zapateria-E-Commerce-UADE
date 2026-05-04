@@ -177,7 +177,9 @@ ecommerce-zapateria/
     │   ├── dto/
     │   │   ├── auth/           # Login, Registro, Refresh, AuthResponse
     │   │   ├── producto/       # ProductoRequest/Response, Variante*
+    │   │   ├── carrito/        # Agregar/Actualizar item requests, Carrito/Checkout responses
     │   │   ├── catalogo/       # Marca, Genero, Tipo, Categoria responses
+    │   │   ├── usuario/        # UsuarioResponse
     │   │   ├── orden/          # OrdenResponse, DetalleOrdenResponse
     │   │   └── common/         # ErrorResponse
     │   ├── security/           # JwtService, UserDetailsService
