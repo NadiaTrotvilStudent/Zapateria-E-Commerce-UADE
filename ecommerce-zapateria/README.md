@@ -453,7 +453,13 @@ Desde `ecommerce-zapateria/`:
 ./mvnw test
 ```
 
-Los tests usan H2 en memoria con perfil `test`, asi que no dependen de MySQL ni de Docker.
+El proyecto incluye pruebas unitarias con JUnit y Mockito para servicios de negocio, por ejemplo:
+
+- `AuthServiceTest`
+- `CarritoServiceTest`
+- `ProductoServiceTest`
+
+Tambien incluye pruebas de integracion con Spring Boot, MockMvc y H2 en memoria con perfil `test`, asi que no dependen de MySQL ni de Docker.
 
 ## Comandos utiles
 
