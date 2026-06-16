@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import Counter from '@/components/Counter.jsx';
 
 function Home() {
   return (
@@ -26,6 +27,8 @@ function Home() {
           </Link>
         </article>
       </div>
+
+      <Counter />
     </section>
   );
 }
