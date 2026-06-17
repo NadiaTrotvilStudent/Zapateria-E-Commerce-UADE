@@ -2,8 +2,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import PrivateRoute from '@/routes/PrivateRoute.jsx';
 import Cart from '@/pages/Cart.jsx';
 import Checkout from '@/pages/Checkout.jsx';
+import Favorites from '@/pages/Favorites.jsx';
 import Home from '@/pages/Home.jsx';
 import Login from '@/pages/Login.jsx';
+import MyOrders from '@/pages/MyOrders.jsx';
 import MyProducts from '@/pages/MyProducts.jsx';
 import NotFound from '@/pages/NotFound.jsx';
 import ProductDetail from '@/pages/ProductDetail.jsx';
@@ -17,6 +19,7 @@ function AppRouter() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/favoritos" element={<Favorites />} />
       <Route path="/productos/:id" element={<ProductDetail />} />
       <Route
         path="/carrito"
@@ -31,6 +34,14 @@ function AppRouter() {
         element={
           <PrivateRoute>
             <Checkout />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mis-compras"
+        element={
+          <PrivateRoute>
+            <MyOrders />
           </PrivateRoute>
         }
       />

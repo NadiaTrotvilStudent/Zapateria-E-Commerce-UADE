@@ -28,6 +28,29 @@
   --container: 1120px;
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  color: #edf4ef;
+  background: #0c1412;
+
+  --color-bg: #0c1412;
+  --color-surface: #121f1b;
+  --color-surface-alt: #1a2b25;
+  --color-text: #edf4ef;
+  --color-muted: #a6b7ae;
+  --color-border: #2d433a;
+  --color-primary: #55c7a4;
+  --color-primary-dark: #83dfc0;
+  --color-secondary: #ef9f69;
+  --color-secondary-dark: #ffc08f;
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.28);
+}
+
+:root[data-contrast="high"] {
+  --color-muted: var(--color-text);
+  --color-border: var(--color-primary-dark);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -40,6 +63,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: var(--color-bg);
 }
 
 a {
@@ -56,6 +80,16 @@ select {
 
 button {
   cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
 
 h1,
@@ -91,6 +125,13 @@ p {
   font-weight: 700;
   line-height: 1;
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(85, 199, 164, 0.45);
+  outline-offset: 2px;
 }
 
 .button--primary {
