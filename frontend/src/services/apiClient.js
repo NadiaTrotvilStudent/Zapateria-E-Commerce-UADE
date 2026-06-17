@@ -1,11 +1,12 @@
 const RAW_API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
 
-// como .env ya viene con /api al final y despues concateno /api/productos
-// me quedaba /api/api/productos, asi que se lo saco aca
+// VITE_API_URL deberia ser solo el host (ej http://localhost:8080).
+// Pero si alguien deja un /api al final, se lo saco aca asi no quedan
+// urls feas tipo /api/api/productos.
 function normalizeBase(url) {
   let base = url.replace(/\/+$/, '');
   if (base.endsWith('/api')) {
-    base = base.slice(0, -'/api'.length);
+    base = base.substring(0, base.length - 4);
   }
   return base;
 }

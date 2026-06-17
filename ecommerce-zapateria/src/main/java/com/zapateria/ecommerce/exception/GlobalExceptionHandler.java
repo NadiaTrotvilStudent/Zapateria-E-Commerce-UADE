@@ -7,15 +7,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.transaction.TransactionException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.Instant;
 import java.util.LinkedHashMap;
@@ -56,46 +52,29 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.FORBIDDEN, exception.getMessage(), null);
     }
 
+    // Body JSON ausente o mal formado.
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleUnreadableBody(HttpMessageNotReadableException exception) {
         return buildResponse(HttpStatus.BAD_REQUEST, "Cuerpo de la solicitud invalido o ausente", null);
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException exception) {
-        String message = "Parametro '" + exception.getName() + "' tiene un valor invalido";
-        return buildResponse(HttpStatus.BAD_REQUEST, message, null);
-    }
-
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException exception) {
-        return buildResponse(HttpStatus.METHOD_NOT_ALLOWED, "Metodo HTTP no soportado para este endpoint", null);
-    }
-
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNoHandler(NoHandlerFoundException exception) {
-        return buildResponse(HttpStatus.NOT_FOUND, "Recurso no encontrado", null);
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException exception) {
-        return buildResponse(HttpStatus.FORBIDDEN, "Acceso denegado", null);
-    }
-
+    // Credenciales invalidas en /api/auth/login (BadCredentialsException, etc).
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException exception) {
         return buildResponse(HttpStatus.UNAUTHORIZED, "Credenciales invalidas", null);
     }
 
+    // Si la base de datos no responde no queremos que se filtre el stacktrace.
     @ExceptionHandler({DataAccessException.class, TransactionException.class})
     public ResponseEntity<ErrorResponse> handleDataAccess(Exception exception) {
         log.error("Error de acceso a datos: {}", exception.getMessage());
         return buildResponse(HttpStatus.SERVICE_UNAVAILABLE, "Servicio temporalmente no disponible", null);
     }
 
+    // Fallback general para que cualquier error inesperado responda JSON limpio.
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception exception) {
-        log.error("Error no controlado: {}", exception.getClass().getName(), exception);
+        log.error("Error no controlado", exception);
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno del servidor", null);
     }
 
