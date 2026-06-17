@@ -1,14 +1,17 @@
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite } from '@/store/slices/favoritesSlice.js';
+import { useFetch } from '@/hooks/useFetch.js';
+import { fetchProducts } from '@/services/productsService.js';
 import { formatCurrency } from '@/utils/formatters.js';
+import Loader from '@/components/Loader.jsx';
+import ErrorMessage from '@/components/ErrorMessage.jsx';
 
 function Favorites() {
   const dispatch = useDispatch();
   const favoriteIds = useSelector((state) => state.favorites.productIds);
-  const products = useSelector((state) => (
-    state.products.items.filter((product) => favoriteIds.includes(Number(product.id)))
-  ));
+  const { data, loading, error } = useFetch(() => fetchProducts(), []);
+  const products = (data || []).filter((product) => favoriteIds.includes(Number(product.id)));
 
   return (
     <section className="page" aria-labelledby="favorites-title">
@@ -18,12 +21,15 @@ function Favorites() {
         <p>Los favoritos se guardan por ID de producto y persisten al recargar la pagina.</p>
       </div>
 
-      {products.length === 0 ? (
+      {loading && <Loader message="Cargando productos..." />}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {!loading && !error && products.length === 0 && (
         <div className="placeholder-panel">
           <p>Todavia no marcaste productos como favoritos.</p>
           <Link className="button button--primary" to="/home">Ir al catalogo</Link>
         </div>
-      ) : (
+      )}
+      {!loading && !error && products.length > 0 && (
         <div className="product-grid">
           {products.map((product) => (
             <article className="product-card" key={product.id}>

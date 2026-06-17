@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/store/slices/authSlice.js';
@@ -18,6 +19,7 @@ function Navbar() {
   const favoriteIds = useSelector((state) => state.favorites.productIds);
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const cartCount = cartItems.reduce((total, item) => total + item.cantidad, 0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className="site-header">
@@ -26,7 +28,16 @@ function Navbar() {
           Zapateria UADE
         </Link>
 
-        <div className="navbar__links">
+        <button
+          className="navbar__menu-btn"
+          type="button"
+          aria-label="Abrir menu"
+          onClick={() => setMenuOpen((prev) => !prev)}
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
+
+        <div className={`navbar__links${menuOpen ? ' navbar__links--open' : ''}`}>
           {navigationItems.map((item) => (
             <NavLink
               key={item.to}
@@ -34,6 +45,7 @@ function Navbar() {
                 isActive ? 'navbar__link navbar__link--active' : 'navbar__link'
               }
               to={item.to}
+              onClick={() => setMenuOpen(false)}
             >
               {item.label}
               {item.to === '/carrito' && cartCount > 0 ? (

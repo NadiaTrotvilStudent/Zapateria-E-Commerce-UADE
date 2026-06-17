@@ -27,7 +27,24 @@ function Cart() {
           <div className="cart-list">
             {cartItems.map((item) => (
               <article className="cart-item" key={item.varianteProductoId}>
-                <img src={item.imagen} alt={item.nombre} />
+                {item.imagen ? (
+                  <img src={item.imagen} alt={item.nombre} />
+                ) : (
+                  <div
+                    style={{
+                      height: '9rem',
+                      borderRadius: '14px',
+                      background: 'var(--color-surface-alt)',
+                      display: 'grid',
+                      placeItems: 'center',
+                      color: 'var(--color-muted)',
+                      fontSize: '0.85rem',
+                      fontWeight: 700,
+                    }}
+                  >
+                    Sin imagen
+                  </div>
+                )}
                 <div>
                   <h2>{item.nombre}</h2>
                   <p>Talle {item.talle} / {item.color}</p>

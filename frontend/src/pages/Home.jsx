@@ -14,12 +14,19 @@ function Home() {
 
   // estado del filtro, cuando cambia se vuelve a hacer el fetch
   const [categoriaId, setCategoriaId] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const productosFetch = useFetch(() => fetchProducts(categoriaId || null), [categoriaId]);
   const categoriasFetch = useFetch(() => fetchCategorias(), []);
 
   const products = productosFetch.data ?? [];
   const categorias = categoriasFetch.data ?? [];
+
+  const filteredProducts = searchQuery
+    ? products.filter((product) =>
+        product.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : products;
 
   return (
     <section className="page" aria-labelledby="home-title">
@@ -35,11 +42,19 @@ function Home() {
 
         <div className="redux-summary" aria-label="Resumen catalogo">
           <span>Fuente: API REST</span>
-          <span>{products.length} productos</span>
+          <span>{filteredProducts.length} de {products.length} productos</span>
           <span>{favoriteIds.length} favoritos</span>
         </div>
 
         <div className="form-panel" style={{ gap: '0.5rem' }}>
+          <label className="field-label" htmlFor="search">Buscar producto</label>
+          <input
+            id="search"
+            type="text"
+            placeholder="Escribe el nombre..."
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+          />
           <label className="field-label" htmlFor="categoria">Filtrar por categoria</label>
           <select
             id="categoria"
@@ -56,14 +71,14 @@ function Home() {
 
       {productosFetch.loading && <Loader message="Cargando productos..." />}
       {productosFetch.error && <ErrorMessage>{productosFetch.error}</ErrorMessage>}
-      {!productosFetch.loading && !productosFetch.error && products.length === 0 && (
+      {!productosFetch.loading && !productosFetch.error && filteredProducts.length === 0 && (
         <div className="placeholder-panel">
-          <p>No hay productos para esta categoria.</p>
+          <p>{searchQuery ? 'No hay productos que coincidan con la busqueda.' : 'No hay productos para esta categoria.'}</p>
         </div>
       )}
-      {!productosFetch.loading && !productosFetch.error && products.length > 0 && (
+      {!productosFetch.loading && !productosFetch.error && filteredProducts.length > 0 && (
         <div className="product-grid">
-          {products.map((product) => {
+          {filteredProducts.map((product) => {
             const isFavorite = favoriteIds.includes(Number(product.id));
             return (
               <article className="product-card" key={product.id}>
