@@ -3,6 +3,7 @@ package com.zapateria.ecommerce.controller;
 import com.zapateria.ecommerce.dto.carrito.ActualizarCantidadCarritoRequest;
 import com.zapateria.ecommerce.dto.carrito.AgregarItemCarritoRequest;
 import com.zapateria.ecommerce.dto.carrito.CarritoResponse;
+import com.zapateria.ecommerce.dto.carrito.CheckoutResponse;
 import com.zapateria.ecommerce.service.CarritoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -64,6 +65,12 @@ public class CarritoController {
     @Operation(summary = "Vaciar carrito", description = "Elimina todos los items del carrito del usuario autenticado.")
     public CarritoResponse vaciarCarrito(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         return carritoService.vaciarCarrito(currentUserId(jwt));
+    }
+
+    @PostMapping("/checkout")
+    @Operation(summary = "Confirmar compra", description = "Convierte el carrito del usuario en una orden y lo vacia.")
+    public CheckoutResponse checkout(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        return carritoService.checkout(currentUserId(jwt));
     }
 
     private Long currentUserId(Jwt jwt) {

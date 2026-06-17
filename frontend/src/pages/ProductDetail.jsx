@@ -1,22 +1,52 @@
-import { Link, useParams } from 'react-router-dom';
 import { useMemo, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem } from '@/store/slices/cartSlice.js';
+import { useFetch } from '@/hooks/useFetch.js';
+import { fetchProductById } from '@/services/productsService.js';
+import { useCart } from '@/context/CartContext.jsx';
 import { toggleFavorite } from '@/store/slices/favoritesSlice.js';
 import { formatCurrency } from '@/utils/formatters.js';
+import Loader from '@/components/Loader.jsx';
+import ErrorMessage from '@/components/ErrorMessage.jsx';
+import SuccessMessage from '@/components/SuccessMessage.jsx';
 
 function ProductDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const product = useSelector((state) => state.products.items.find((item) => String(item.id) === id));
+  const { addToCart } = useCart();
   const favoriteIds = useSelector((state) => state.favorites.productIds);
+
+  // cada vez que cambia el id de la URL se re-carga el producto
+  const { data: product, loading, error } = useFetch(
+    () => fetchProductById(id),
+    [id],
+  );
+
   const [selectedVariantId, setSelectedVariantId] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [addedFeedback, setAddedFeedback] = useState(false);
 
   const selectedVariant = useMemo(() => {
     const variants = product?.variantes ?? [];
     return variants.find((variant) => String(variant.id) === selectedVariantId) ?? variants[0];
   }, [product, selectedVariantId]);
+
+  if (loading) {
+    return (
+      <section className="page" aria-labelledby="product-detail-title">
+        <Loader message="Cargando producto..." />
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="page" aria-labelledby="product-detail-title">
+        <ErrorMessage>{error}</ErrorMessage>
+        <Link className="button button--primary" to="/home">Volver al catalogo</Link>
+      </section>
+    );
+  }
 
   if (!product) {
     return (
@@ -33,17 +63,18 @@ function ProductDetail() {
 
   const handleAddToCart = () => {
     if (!selectedVariant) return;
-
-    dispatch(addItem({
-      productoId: product.id,
+    addToCart({
       varianteProductoId: selectedVariant.id,
+      productoId: product.id,
       nombre: product.nombre,
       talle: selectedVariant.talle,
       color: selectedVariant.color,
       precioUnitario: Number(product.precio),
       cantidad: quantity,
       imagen: product.imagenes?.[0],
-    }));
+    });
+    setAddedFeedback(true);
+    setTimeout(() => setAddedFeedback(false), 2000);
   };
 
   return (
@@ -82,6 +113,8 @@ function ProductDetail() {
             value={quantity}
             onChange={(event) => setQuantity(Number(event.target.value))}
           />
+
+          {addedFeedback && <SuccessMessage message="Producto agregado al carrito" />}
 
           <div className="product-card__actions">
             <button className="button button--primary" type="button" onClick={handleAddToCart}>

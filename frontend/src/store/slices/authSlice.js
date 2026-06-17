@@ -11,10 +11,12 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    // Login real: el backend devuelve { accessToken, refreshToken, usuario }.
     loginSuccess: (state, action) => {
-      state.user = action.payload.user;
-      state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
+      const { accessToken, refreshToken, usuario } = action.payload;
+      state.user = usuario;
+      state.accessToken = accessToken;
+      state.refreshToken = refreshToken;
       state.isAuthenticated = true;
     },
     logout: () => initialState,

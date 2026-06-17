@@ -202,7 +202,25 @@ Zapateria-E-Commerce-UADE/
 
 La API queda en `http://localhost:8080` en cualquiera de estos flujos.
 
-### Opcion 1: todo con Docker
+### Opcion 1: la mas rapida, sin MySQL (perfil `local`, H2 en memoria)
+
+Es el perfil por defecto. No necesitas MySQL ni Docker.
+
+Desde `ecommerce-zapateria/`:
+
+```bash
+./mvnw spring-boot:run
+```
+
+El seeder carga datos demo. Con H2 los datos se pierden al apagar la app, lo cual es perfecto para iterar rapido o correr un smoke test.
+
+Console H2 en `http://localhost:8080/h2-console` con:
+
+- JDBC URL: `jdbc:h2:mem:zapateria`
+- user: `sa`
+- password: vacio
+
+### Opcion 2: todo con Docker (MySQL persistente)
 
 Desde la raiz del repo:
 
@@ -227,7 +245,7 @@ Si tambien queres borrar los datos:
 docker compose down -v
 ```
 
-### Opcion 2: MySQL en Docker y app local
+### Opcion 3: MySQL en Docker y app local (perfil `mysql`)
 
 Primero, desde la raiz:
 
@@ -238,30 +256,18 @@ docker compose up -d mysql
 Despues, desde `ecommerce-zapateria/`:
 
 ```bash
-./mvnw spring-boot:run
+SPRING_PROFILES_ACTIVE=mysql ./mvnw spring-boot:run
 ```
 
-Este flujo sirve mas si queres usar el IDE, poner breakpoints o iterar mas rapido.
-
-### Opcion 3: sin Docker, con H2 en memoria
-
-Desde `ecommerce-zapateria/`:
-
-```bash
-SPRING_PROFILES_ACTIVE=local ./mvnw spring-boot:run
-```
-
-Este perfil no necesita MySQL. Es util para probar rapido o correr un smoke test sin levantar nada extra.
-
-Con H2 los datos se pierden al apagar la app.
+Este flujo sirve mas si queres usar el IDE, poner breakpoints o iterar contra MySQL.
 
 ## Requisitos
 
 Segun como lo quieras correr:
 
+- Perfil `local` (default): Java 17 o superior. No requiere nada mas.
 - Docker completo: Docker Desktop.
 - App local contra MySQL: Docker Desktop + Java 17 o superior.
-- Perfil `local`: Java 17 o superior.
 - Solo tests: Java 17 o superior.
 
 Si estas en Mac y te falta el entorno:
@@ -273,7 +279,9 @@ brew install openjdk@21
 
 ## Base de datos
 
-Para desarrollo con MySQL, la configuracion actual usa:
+Por defecto, el perfil `local` usa H2 en memoria y no requiere configuracion extra.
+
+Para desarrollo con MySQL (perfiles `mysql` o `docker`), la configuracion usa:
 
 - host: `localhost`
 - puerto: `3307`
@@ -300,7 +308,7 @@ Segun el perfil, se cargan categorias, marcas, generos, tipos de producto y algu
 - `vendedor1@test.com`
 - `Password123!`
 
-Si corres el perfil `local`, tambien podes entrar a la consola H2 en:
+En el perfil `local` (default) podes entrar a la consola H2 en:
 
 `http://localhost:8080/h2-console`
 

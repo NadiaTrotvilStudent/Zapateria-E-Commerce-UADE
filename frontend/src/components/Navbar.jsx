@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/store/slices/authSlice.js';
+import { useCart } from '@/context/CartContext.jsx';
 
 const navigationItems = [
   { to: '/home', label: 'Inicio' },
@@ -13,7 +14,7 @@ const navigationItems = [
 
 function Navbar() {
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.items);
+  const { cartItems } = useCart();
   const favoriteIds = useSelector((state) => state.favorites.productIds);
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const cartCount = cartItems.reduce((total, item) => total + item.cantidad, 0);

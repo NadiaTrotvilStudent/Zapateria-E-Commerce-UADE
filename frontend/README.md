@@ -14,8 +14,12 @@ npm run lint
 La app usa la variable:
 
 ```text
-VITE_API_URL=http://localhost:8080/api
+VITE_API_URL=http://localhost:8080
 ```
+
+Apunta al host del backend, sin `/api`. Los services del frontend ya prefijan
+`/api/...` por su cuenta. Si pasas un valor con `/api` al final, se normaliza
+para evitar URLs tipo `/api/api/...`.
 
 ## Estructura
 
