@@ -3,14 +3,15 @@ import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/store/slices/authSlice.js';
 import { useCart } from '@/context/CartContext.jsx';
+import { userHasRole } from '@/utils/authRoles.js';
 
 const navigationItems = [
   { to: '/home', label: 'Inicio' },
   { to: '/favoritos', label: 'Favoritos' },
-  { to: '/carrito', label: 'Carrito' },
-  { to: '/checkout', label: 'Checkout' },
-  { to: '/mis-compras', label: 'Mis compras' },
-  { to: '/mis-productos', label: 'Mis productos' },
+  { to: '/carrito', label: 'Carrito', private: true },
+  { to: '/checkout', label: 'Checkout', private: true },
+  { to: '/mis-compras', label: 'Mis compras', private: true },
+  { to: '/mis-productos', label: 'Mis productos', private: true, roles: ['ADMIN', 'VENDEDOR'] },
 ];
 
 function Navbar() {
@@ -20,6 +21,17 @@ function Navbar() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const cartCount = cartItems.reduce((total, item) => total + item.cantidad, 0);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const visibleItems = navigationItems.filter((item) => {
+    if (item.private && !isAuthenticated) return false;
+    if (item.roles?.length) return item.roles.some((role) => userHasRole(user, role));
+    return true;
+  });
+
+  const handleLogout = () => {
+    dispatch(logout());
+    setMenuOpen(false);
+  };
 
   return (
     <header className="site-header">
@@ -38,7 +50,7 @@ function Navbar() {
         </button>
 
         <div className={`navbar__links${menuOpen ? ' navbar__links--open' : ''}`}>
-          {navigationItems.map((item) => (
+          {visibleItems.map((item) => (
             <NavLink
               key={item.to}
               className={({ isActive }) =>
@@ -60,7 +72,7 @@ function Navbar() {
 
         <div className="navbar__actions" aria-label="Acciones de usuario">
           {isAuthenticated ? (
-            <button className="button button--primary" type="button" onClick={() => dispatch(logout())}>
+            <button className="button button--primary" type="button" onClick={handleLogout}>
               Salir {user?.username}
             </button>
           ) : (

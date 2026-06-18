@@ -27,22 +27,14 @@ function Checkout() {
     setLoading(true);
     setError(null);
     try {
-      // primero mando cada item al backend asi el stock se descuenta ahi
-      // TODO: usar Promise.all para mandarlos en paralelo, asi tarda menos
-      for (const item of cartItems) {
-        await apiFetch('/api/carrito', {
-          method: 'POST',
-          token: accessToken,
-          body: { varianteProductoId: item.varianteProductoId, cantidad: item.cantidad },
-        });
-      }
-      // despues el checkout que crea la orden y me devuelve el resumen
+      // El carrito ya se mantiene sincronizado desde CartContext.
+      // Aca solo confirmo la compra para no duplicar cantidades antes del checkout.
       const checkoutResponse = await apiFetch('/api/carrito/checkout', {
         method: 'POST',
         token: accessToken,
       });
       setSuccess(checkoutResponse);
-      clearCart();
+      await clearCart();
       setTimeout(() => navigate('/mis-compras'), 1500);
     } catch (err) {
       setError(err.message);
@@ -100,14 +92,19 @@ function Checkout() {
           ))}
           {loading && <Loader message="Procesando compra..." />}
           {error && <ErrorMessage>{error}</ErrorMessage>}
-          <button
-            className="button button--primary"
-            type="button"
-            onClick={handleCheckout}
-            disabled={loading}
-          >
-            {loading ? 'Procesando...' : 'Confirmar compra'}
-          </button>
+          <div className="form-actions">
+            <button
+              className="button button--primary"
+              type="button"
+              onClick={handleCheckout}
+              disabled={loading}
+            >
+              {loading ? 'Procesando...' : 'Confirmar compra'}
+            </button>
+            <button className="button button--ghost" type="button" onClick={() => navigate(-1)} disabled={loading}>
+              Cancelar
+            </button>
+          </div>
         </div>
       )}
     </section>

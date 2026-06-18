@@ -34,7 +34,11 @@ function Favorites() {
           {products.map((product) => (
             <article className="product-card" key={product.id}>
               <div className="product-card__media">
-                <img src={product.imagenes?.[0]} alt={product.nombre} />
+                {product.imagenes?.[0] ? (
+                  <img src={product.imagenes[0]} alt={product.nombre} />
+                ) : (
+                  <div className="image-placeholder">Sin imagen</div>
+                )}
                 <span>Favorito</span>
               </div>
               <div className="product-card__body">

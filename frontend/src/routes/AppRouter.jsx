@@ -48,7 +48,7 @@ function AppRouter() {
       <Route
         path="/productos/nuevo"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={['ADMIN', 'VENDEDOR']}>
             <ProductForm mode="create" />
           </PrivateRoute>
         }
@@ -56,7 +56,7 @@ function AppRouter() {
       <Route
         path="/productos/editar/:id"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={['ADMIN', 'VENDEDOR']}>
             <ProductForm mode="edit" />
           </PrivateRoute>
         }
@@ -64,7 +64,7 @@ function AppRouter() {
       <Route
         path="/mis-productos"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={['ADMIN', 'VENDEDOR']}>
             <MyProducts />
           </PrivateRoute>
         }

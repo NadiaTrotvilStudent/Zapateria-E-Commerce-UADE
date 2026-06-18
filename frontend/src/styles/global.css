@@ -162,3 +162,17 @@ select:focus-visible {
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
+
+.button--danger {
+  color: #ffffff;
+  background: var(--color-error);
+}
+
+.button--danger:hover {
+  background: #7a271a;
+}
+
+textarea:focus-visible {
+  outline: 3px solid rgba(85, 199, 164, 0.45);
+  outline-offset: 2px;
+}

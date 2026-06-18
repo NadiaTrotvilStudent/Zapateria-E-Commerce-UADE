@@ -6,18 +6,31 @@ import { loginSuccess } from '@/store/slices/authSlice.js';
 import Loader from '@/components/Loader.jsx';
 import ErrorMessage from '@/components/ErrorMessage.jsx';
 
+const emptyForm = {
+  username: '',
+  email: '',
+  password: '',
+  nombre: '',
+  apellido: '',
+};
+
+const placeholders = {
+  username: 'Sugerencia: cliente-nuevo',
+  email: 'Sugerencia: nuevo@test.com',
+  password: 'Sugerencia: Password123!',
+  nombre: 'Sugerencia: Cliente',
+  apellido: 'Sugerencia: Nuevo',
+};
+
 function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    username: 'cliente-nuevo',
-    email: 'nuevo@test.com',
-    password: 'Password123!',
-    nombre: 'Cliente',
-    apellido: 'Nuevo',
-  });
+  const [form, setForm] = useState(emptyForm);
+  const [focusedField, setFocusedField] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const getPlaceholder = (field) => (focusedField === field ? '' : placeholders[field]);
 
   const handleChange = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -43,28 +56,82 @@ function Register() {
       <div className="page__header">
         <p className="eyebrow">Perfil de usuario</p>
         <h1 id="register-title">Registro</h1>
-        <p>Crea una cuenta contra el backend (POST /api/auth/register) y entra automaticamente.</p>
+        <p>Crea una cuenta contra el backend. Las sugerencias se muestran como ayuda y desaparecen al tocar cada campo.</p>
       </div>
 
-      <form className="placeholder-panel form-panel" onSubmit={handleRegister}>
+      <form className="placeholder-panel form-panel auth-panel" onSubmit={handleRegister}>
         <label className="field-label" htmlFor="username">Username</label>
-        <input id="username" name="username" value={form.username} onChange={handleChange} required />
+        <input
+          id="username"
+          name="username"
+          value={form.username}
+          onChange={handleChange}
+          onFocus={() => setFocusedField('username')}
+          onBlur={() => setFocusedField(null)}
+          placeholder={getPlaceholder('username')}
+          required
+        />
         <label className="field-label" htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" value={form.email} onChange={handleChange} required />
+        <input
+          id="email"
+          name="email"
+          type="email"
+          value={form.email}
+          onChange={handleChange}
+          onFocus={() => setFocusedField('email')}
+          onBlur={() => setFocusedField(null)}
+          placeholder={getPlaceholder('email')}
+          required
+        />
         <label className="field-label" htmlFor="password">Password (min 8)</label>
-        <input id="password" name="password" type="password" value={form.password} onChange={handleChange} required minLength={8} />
+        <input
+          id="password"
+          name="password"
+          type="password"
+          value={form.password}
+          onChange={handleChange}
+          onFocus={() => setFocusedField('password')}
+          onBlur={() => setFocusedField(null)}
+          placeholder={getPlaceholder('password')}
+          required
+          minLength={8}
+        />
         <label className="field-label" htmlFor="nombre">Nombre</label>
-        <input id="nombre" name="nombre" value={form.nombre} onChange={handleChange} required />
+        <input
+          id="nombre"
+          name="nombre"
+          value={form.nombre}
+          onChange={handleChange}
+          onFocus={() => setFocusedField('nombre')}
+          onBlur={() => setFocusedField(null)}
+          placeholder={getPlaceholder('nombre')}
+          required
+        />
         <label className="field-label" htmlFor="apellido">Apellido</label>
-        <input id="apellido" name="apellido" value={form.apellido} onChange={handleChange} required />
+        <input
+          id="apellido"
+          name="apellido"
+          value={form.apellido}
+          onChange={handleChange}
+          onFocus={() => setFocusedField('apellido')}
+          onBlur={() => setFocusedField(null)}
+          placeholder={getPlaceholder('apellido')}
+          required
+        />
         {loading && <Loader message="Creando cuenta..." />}
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <button className="button button--secondary" type="submit" disabled={loading}>
-          {loading ? 'Creando...' : 'Crear cuenta'}
-        </button>
-        <p>
-          Ya tenes cuenta? <Link to="/login">Inicia sesion</Link>
-        </p>
+        <div className="form-actions auth-actions">
+          <button className="button button--ghost" type="button" onClick={() => navigate(-1)} disabled={loading}>
+            Cancelar
+          </button>
+          <button className="button button--secondary" type="submit" disabled={loading}>
+            {loading ? 'Creando...' : 'Crear cuenta'}
+          </button>
+        </div>
+        <div className="auth-switch">
+          <span>Ya tenes cuenta?</span>
+          <Link to="/login">Inicia sesion</Link>
+        </div>
       </form>
     </section>
   );

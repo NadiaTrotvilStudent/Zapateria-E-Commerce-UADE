@@ -48,3 +48,20 @@ export async function updateProduct(id, producto, token) {
     token,
   });
 }
+
+// DELETE /api/productos/:id (eliminar, requiere JWT)
+export async function deleteProduct(id, token) {
+  return apiFetch(`/api/productos/${id}`, {
+    method: 'DELETE',
+    token,
+  });
+}
+
+// POST /api/productos/:productoId/variantes (stock real del producto)
+export async function createProductVariant(productoId, variante, token) {
+  return apiFetch(`/api/productos/${productoId}/variantes`, {
+    method: 'POST',
+    body: variante,
+    token,
+  });
+}

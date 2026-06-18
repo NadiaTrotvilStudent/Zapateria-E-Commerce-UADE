@@ -46,26 +46,30 @@ function Home() {
           <span>{favoriteIds.length} favoritos</span>
         </div>
 
-        <div className="form-panel" style={{ gap: '0.5rem' }}>
-          <label className="field-label" htmlFor="search">Buscar producto</label>
-          <input
-            id="search"
-            type="text"
-            placeholder="Escribe el nombre..."
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-          />
-          <label className="field-label" htmlFor="categoria">Filtrar por categoria</label>
-          <select
-            id="categoria"
-            value={categoriaId}
-            onChange={(event) => setCategoriaId(event.target.value)}
-          >
-            <option value="">Todas las categorias</option>
-            {categorias.map((cat) => (
-              <option key={cat.id} value={cat.id}>{cat.nombre}</option>
-            ))}
-          </select>
+        <div className="catalog-filters" aria-label="Filtros del catalogo">
+          <div>
+            <label className="field-label" htmlFor="search">Buscar producto</label>
+            <input
+              id="search"
+              type="text"
+              placeholder="Escribe el nombre..."
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+            />
+          </div>
+          <div>
+            <label className="field-label" htmlFor="categoria">Filtrar por categoria</label>
+            <select
+              id="categoria"
+              value={categoriaId}
+              onChange={(event) => setCategoriaId(event.target.value)}
+            >
+              <option value="">Todas las categorias</option>
+              {categorias.map((cat) => (
+                <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
@@ -83,7 +87,11 @@ function Home() {
             return (
               <article className="product-card" key={product.id}>
                 <div className="product-card__media">
-                  <img src={product.imagenes?.[0]} alt={product.nombre} />
+                  {product.imagenes?.[0] ? (
+                  <img src={product.imagenes[0]} alt={product.nombre} />
+                ) : (
+                  <div className="image-placeholder">Sin imagen</div>
+                )}
                   <span>{product.categoriaNombre}</span>
                 </div>
                 <div className="product-card__body">

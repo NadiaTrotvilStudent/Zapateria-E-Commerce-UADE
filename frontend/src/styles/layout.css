@@ -543,3 +543,225 @@ select {
     display: inline-flex;
   }
 }
+
+textarea {
+  width: 100%;
+  min-height: 6rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in srgb, var(--color-muted) 72%, transparent);
+}
+
+.page__header--actions {
+  display: flex;
+  max-width: none;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.page__header--actions > div {
+  max-width: 760px;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.auth-actions {
+  justify-content: space-between;
+}
+
+.auth-actions .button {
+  min-width: 9.5rem;
+}
+
+.form-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-grid > div {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.variant-fieldset {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+}
+
+.variant-fieldset legend {
+  padding-inline: 0.35rem;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.variant-fieldset p {
+  margin-bottom: 0;
+}
+
+.variant-summary {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+}
+
+.variant-summary__items,
+.stock-helper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.variant-summary__items span,
+.stock-helper span,
+.stock-helper strong,
+.stock-pill {
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.stock-helper strong {
+  color: var(--color-primary-dark);
+}
+
+.stock-pill--empty,
+.stock-warning {
+  color: var(--color-error);
+}
+
+.image-placeholder {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 13rem;
+  place-items: center;
+  color: var(--color-muted);
+  font-weight: 800;
+  background:
+    linear-gradient(135deg, transparent 25%, rgba(30, 111, 92, 0.08) 25%, rgba(30, 111, 92, 0.08) 50%, transparent 50%, transparent 75%, rgba(30, 111, 92, 0.08) 75%),
+    var(--color-surface-alt);
+  background-size: 2rem 2rem;
+}
+
+.image-placeholder--large {
+  min-height: 18rem;
+}
+
+.image-placeholder--cart {
+  height: 9rem;
+  min-height: 9rem;
+  border-radius: 14px;
+}
+
+.empty-state {
+  justify-items: start;
+}
+
+.cart-item__subtotal {
+  margin-top: 0.35rem;
+  margin-bottom: 0;
+  color: var(--color-text);
+  font-weight: 800;
+}
+
+.stock-warning {
+  margin-bottom: 0;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+@media (min-width: 640px) {
+  .form-grid--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 820px) {
+  .form-grid--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.catalog-filters {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.catalog-filters > div,
+.auth-panel {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.auth-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface-alt);
+  color: var(--color-muted);
+  font-weight: 700;
+}
+
+.auth-switch a {
+  color: var(--color-primary-dark);
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 0.18rem;
+}
+
+.stock-notice {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(180, 95, 52, 0.35);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-secondary) 12%, var(--color-surface));
+  color: var(--color-secondary-dark);
+  font-weight: 800;
+}
+
+@media (min-width: 760px) {
+  .catalog-filters {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .catalog-filters > div {
+    flex: 0 1 42%;
+  }
+}
